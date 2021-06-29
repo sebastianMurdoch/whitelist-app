@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -24,13 +25,14 @@ func main() {
 	})
 	
 	router.POST("/data", func(c *gin.Context) {
-		var data []byte
+		var data map[string]interface{}
 		if err := c.Bind(&data); err != nil {
-			log.Println(err.Error())
+			fmt.Println(err.Error())
 			c.JSON(http.StatusInternalServerError, err.Error())
+			return
 		}
-		log.Println(string(data))
-		c.String(http.StatusOK, string(data))
+		fmt.Println(data)
+		c.JSON(http.StatusOK, data)
 	})
 
 	router.Run(":" + port)
