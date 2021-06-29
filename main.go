@@ -22,6 +22,16 @@ func main() {
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "pong")
 	})
+	
+	router.POST("/data", func(c *gin.Context) {
+		var data []byte
+		if err := c.Bind(&data); err != nil {
+			log.Println(err.Error())
+			c.JSON(http.StatusInternalServerError, err.Error())
+		}
+		log.Println(string(data))
+		c.String(http.StatusOK, string(data))
+	})
 
 	router.Run(":" + port)
 }
